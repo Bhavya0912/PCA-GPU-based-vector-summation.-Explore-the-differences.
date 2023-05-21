@@ -1,41 +1,32 @@
 # PCA-GPU-based-vector-summation.-Explore-the-differences.
-i) Using the program sumArraysOnGPU-timer.cu, set the block.x = 1023. Recompile and run it. Compare the result with the execution confi guration of block.x = 1024. Try to explain the difference and the reason.
-
+i) Using the program sumArraysOnGPU-timer.cu, set the block.x = 1023. Recompile and run it. Compare the result with the execution confi guration of block.x = 1024. Try to explain the difference and the reason. 
+  
 ii) Refer to sumArraysOnGPU-timer.cu, and let block.x = 256. Make a new kernel to let each thread handle two elements. Compare the results with other execution confi gurations.
 ## Aim:
-(i) To modify or set the execution configuration of block.x as 1023 & 1024 and compare the elapsed time obtained on Host and GPU.
+(i) To modify or set the execution configuration of block.x as 1023 & 1024 and compare the elapsed time obtained on Host and GPU. 
 
 (ii) To set the number of threads as 256 and obtain the elapsed time on Host and GPU.
-
 ## Procedure:
-## Step 1 :
+### Step 1 :
 Include the required files and library.
-
-## Step 2 :
-Declare a function sumMatrixOnHost , to perform vector summation on the host side .
-
-## Step 3 :
+### Step 2 : 
+Declare a function sumMatrixOnHost , to perform vector summation on the host side . 
+### Step 3 : 
 Declare a function with __ global __ , which is a CUDA C keyword , to execute the function to perform vector summation on GPU .
-
-## Step 4 :
-Declare Main method/function .
-
-## Step 5 :
+### Step 4 :
+Declare Main method/function . 
+### Step 5 : 
 In the Main function Set up device and data size of vector ,Allocate Host Memory and device global memory,Initialize data at host side and then add vector at host side ,transfer data from host to device.
-
-## Step 6 :
+### Step 6 : 
 Invoke kernel at host side(1023,1024,256), check for kernel error and copy kernel result back to host side.
-
-## Step 7 :
+### Step 7 :
 Finally Free device global memory,host memory and reset device.
-
-## Step 8 :
+### Step 8 :
 Save and Run the Program.
-
-### Program:
-# (i)
-# block.x=1023
-
+## Program: 
+### (i) 
+### block.x=1023
+```
 Name : BHAVYA U
 Register No : 212220230055
 #include "../common/common.h"
@@ -50,7 +41,7 @@ Register No : 212220230055
  * This version of sumArrays adds host timers to measure GPU and CPU
  * performance.
  */
-```
+
 void checkResult(float *hostRef, float *gpuRef, const int N)
 {
     double epsilon = 1.0E-8;
@@ -188,7 +179,8 @@ int main(int argc, char **argv)
     return(0);
 }
 ```
-# block.x = 1024
+### block.x = 1024
+```
 Name : BHAVYA U
 Register No : 212220230055
 #include "../common/common.h"
@@ -203,7 +195,7 @@ Register No : 212220230055
  * This version of sumArrays adds host timers to measure GPU and CPU
  * performance.
  */
-```
+
 void checkResult(float *hostRef, float *gpuRef, const int N)
 {
     double epsilon = 1.0E-8;
@@ -341,8 +333,9 @@ int main(int argc, char **argv)
     return(0);
 }
 ```
-# (ii)
-# block.x = 256
+### (ii)
+### block.x = 256
+```
 Name : BHAVYA U
 Register No : 212220230055
 #include "../common/common.h"
@@ -357,7 +350,7 @@ Register No : 212220230055
  * This version of sumArrays adds host timers to measure GPU and CPU
  * performance.
  */
-```
+
 void checkResult(float *hostRef, float *gpuRef, const int N)
 {
     double epsilon = 1.0E-8;
@@ -494,43 +487,41 @@ int main(int argc, char **argv)
 
     return(0);
 }
+
 ```
 ## Output:
-# block.x = 1023
-![image](https://github.com/Bhavya0912/PCA-GPU-based-vector-summation.-Explore-the-differences./assets/75235293/8be92cc1-8f36-425f-9c2f-4bcf11c9e16a)
+### block.x = 1023
+![a1023co1](https://user-images.githubusercontent.com/93427443/234572266-34d88e0d-74d0-46f0-86b2-5ad00e8e68ea.jpeg)
 ```
 Sum Arrays on Host : 0.034372 sec.
 Sum Arrays on GPU : 0.020783 sec.
 ```
-# block.x = 1024
-![image](https://github.com/Bhavya0912/PCA-GPU-based-vector-summation.-Explore-the-differences./assets/75235293/7195968a-ff47-42bf-ba43-79525491b3f5)
+### block.x = 1024
+![a1024co](https://user-images.githubusercontent.com/93427443/234572810-ec414eca-f8bc-44ab-a4ed-c58539fd4306.jpeg)
 ```
 Sum Arrays on Host : 0.033561 sec.
 Sum Arrays on GPU : 0.021730 sec.
 ```
-
-# block.x = 256
-
+### block.x = 256
+![a256co](https://user-images.githubusercontent.com/93427443/234573069-c6560a78-d620-490d-a75e-148d04c17cf6.jpeg)
 ```
 Sum Arrays on Host : 0.033183 sec.
 Sum Arrays on GPU : 0.020864 sec.
 ```
+#### Host-based array summation vs GPU-based vector summation
 
-Host-based array summation vs GPU-based vector summation
 GPUs: “SIMD” - “Single-Instruction, Multiple-Data”. A GPU can operate on a hundred or a thousand vertices or pixels at once in parallel, but it has to perform exactly the same calculation on all of them.
 
 Whereas a single CPU core can be described as “SISD” - “Single-Instruction, Single-Data”. With multiple CPU cores, we get “MIMD” -- “Multiple-Instruction, Multiple-Data”, where each instruction sequence can be doing entirely different things to different data. Or in other words, multithreading.
 
 So even with all their massive parallelism, GPUs are still effectively single-threaded.
 
-Instead of looping over an expression of 256 array elements, we create huge registers that are a gang of 256 floating point elements. a CPU would have 256 threads progressing at different rates on each array element. A GPU would force all 256 items to be on the same instruction because it's working on these huge registers. This is a reason why we can't run all CPU algorithms efficiently on a GPU.
+Instead of looping over an expression of 256 array elements,  we create huge registers that are a gang of 256 floating point elements. a CPU would have 256 threads progressing at different rates on each array element. A GPU would force all 256 items to be on the same instruction because it's working on these huge registers. This is a reason why we can't run all CPU algorithms efficiently on a GPU. 
 
 CPU : for each i in [0,256]: c[i] = a[i] * b[i] . Here, Each thread progresses at its own rate.
 
-GPU : float32_times256 c,b,a; c = b * a; where c=b*a is one instruction, with three huge operands.
-
-
+GPU : float32_times256 c,b,a;  c = b * a; where c=b*a is one instruction, with three huge operands.
 ## Result:
-(i) The block.x is set as 1023 & 1024 and the elapsed time obtained on Host and GPU is compared.
+(i) The block.x is set as 1023 & 1024 and the elapsed time obtained on Host and GPU is compared. 
 
 (ii) The number of threads is set as 256 and the elapsed time on Host and GPU is obtained.
